@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "GemResourceCreator.h"
+#include "RandomGemResourceCreator.generated.h"
+
+class UCurveFloat;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API URandomGemResourceCreator : public UGemResourceCreator {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UCurveFloat* PlacementDistanceProbabilityCurve;
+
+    URandomGemResourceCreator();
+
+};
+

@@ -1,0 +1,21 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "BXEProspectingLogsActor.generated.h"
+
+class UBXEProspectingLogsObjective;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API ABXEProspectingLogsActor : public AActor {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Transient, meta=(AllowPrivateAccess=true))
+    UBXEProspectingLogsObjective* Objective;
+
+    ABXEProspectingLogsActor(const FObjectInitializer& ObjectInitializer);
+
+    UFUNCTION(BlueprintCallable)
+    void LogFound();
+    
+};
+

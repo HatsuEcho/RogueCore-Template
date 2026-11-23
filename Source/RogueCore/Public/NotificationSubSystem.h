@@ -1,0 +1,40 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=GameInstanceSubsystem -FallbackName=GameInstanceSubsystem
+#include "CampaignNotificationSignatureDelegate.h"
+#include "DelegateDelegate.h"
+#include "SpaceRigNotification.h"
+#include "NotificationSubSystem.generated.h"
+
+class UCampaignNotification;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API UNotificationSubSystem : public UGameInstanceSubsystem {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FDelegate OnNewSpaceRigNotificationEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FCampaignNotificationSignature OnCampaignNotification;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    TArray<FSpaceRigNotification> SpaceRigNotifications;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    UCampaignNotification* CampaignNotification;
+
+    UNotificationSubSystem();
+
+    UFUNCTION(BlueprintCallable)
+    bool GetNextSpaceRigNotification(FSpaceRigNotification& NextNotification);
+    
+    UFUNCTION(BlueprintCallable)
+    void ClearCampaignNotifications();
+    
+    UFUNCTION(BlueprintCallable)
+    void AddSpaceRigNotification(FSpaceRigNotification NewNotification, const FString& ID, bool TriggerEvent);
+    
+};
+

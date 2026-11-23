@@ -1,0 +1,12 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"FriendlyName": "BasicUI (Blueprint SDK)",
+	"Description": "BasicUI reflected interfaces for Blueprint authoring.",
+	"Category": "UI",
+	"EnabledByDefault": false,
+	"CanContainContent": true,
+	"Modules": [
+		{ "Name": "BasicUI", "Type": "Runtime", "LoadingPhase": "Default" }
+	]
+}

@@ -1,0 +1,43 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=ActorComponent -FallbackName=ActorComponent
+#include "CharacterCameraController.generated.h"
+
+class APlayerCharacter;
+class UCameraComponent;
+
+UCLASS(Blueprintable, MinimalAPI, ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
+class UCharacterCameraController : public UActorComponent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    APlayerCharacter* Character;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UCameraComponent* Camera;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float StartFOV;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float targetFov;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float TargetFOVSpeed;
+
+public:
+    UCharacterCameraController(const FObjectInitializer& ObjectInitializer);
+
+    UFUNCTION(BlueprintCallable)
+    void ResetFOV(float FadeSpeed);
+    
+    UFUNCTION(BlueprintCallable)
+    void FOVChanged(float NewFOV);
+    
+    UFUNCTION(BlueprintCallable)
+    void FadeToFOVRelative(float NewTargetFov, float FadeSpeed);
+    
+    UFUNCTION(BlueprintCallable)
+    void FadeToFOV(float NewTargetFov, float FadeSpeed);
+    
+};
+

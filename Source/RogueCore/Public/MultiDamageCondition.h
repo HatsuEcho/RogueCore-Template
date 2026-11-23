@@ -1,0 +1,19 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "DamageCondition.h"
+#include "MultiDamageCondition.generated.h"
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UMultiDamageCondition : public UDamageCondition {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    TArray<UDamageCondition*> Conditions;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool RequireAllTrue;
+
+    UMultiDamageCondition();
+
+};
+

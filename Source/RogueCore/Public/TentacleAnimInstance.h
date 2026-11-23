@@ -1,0 +1,20 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Animation/AnimInstance.h"
+#include "TentacleAnimInstanceProxy.h"
+#include "TentacleAnimInstance.generated.h"
+
+UCLASS(Blueprintable, NonTransient)
+class ROGUECORE_API UTentacleAnimInstance : public UAnimInstance {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    FTentacleAnimInstanceProxy AnimInstanceProxy;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UseActorRotationDuringExtension;
+
+    UTentacleAnimInstance();
+
+};
+

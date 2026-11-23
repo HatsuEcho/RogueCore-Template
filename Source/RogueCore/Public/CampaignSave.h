@@ -1,0 +1,41 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Guid -FallbackName=Guid
+#include "Misc/Guid.h"
+#include "ActiveCampaignItem.h"
+#include "WeeklyCampaignItem.h"
+#include "CampaignSave.generated.h"
+
+USTRUCT(BlueprintType)
+struct FCampaignSave {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FActiveCampaignItem ActiveCampaign;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<FGuid> CompletedCampaigns;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 ActiveCampaignWeek;
+    
+protected:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FWeeklyCampaignItem WeeklySave;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FWeeklyCampaignItem MaxtrixCoreHuntSave;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FWeeklyCampaignItem SeededRandomSave;
+    
+public:
+    ROGUECORE_API FCampaignSave();
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FGuid PriorityTargetCheckedRunId;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool bCheckedRunIsPriorityTarget;
+
+};
+

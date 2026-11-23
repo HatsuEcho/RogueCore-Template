@@ -1,0 +1,20 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=DataAsset -FallbackName=DataAsset
+#include "Engine/DataAsset.h"
+#include "ScrollBoxSettings.h"
+#include "ScrollBoxAsset.generated.h"
+
+UCLASS(Blueprintable)
+class BASICUI_API UScrollBoxAsset : public UDataAsset {
+    GENERATED_BODY()
+public:
+protected:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FScrollBoxSettings Settings;
+    
+public:
+    UScrollBoxAsset();
+
+};
+

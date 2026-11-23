@@ -1,0 +1,29 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Vector -FallbackName=Vector
+#include "AmmoDrivenWeaponAnimInstance.h"
+#include "BeltDrivenAnimInstance.generated.h"
+
+UCLASS(Blueprintable, NonTransient)
+class ROGUECORE_API UBeltDrivenAnimInstance : public UAmmoDrivenWeaponAnimInstance {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float BarrelSpinRate;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    float CurrentBarrelSpinRate;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    FVector ExternalForce;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ExternalForceScale;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FName ExternalForceBoneName;
+
+    UBeltDrivenAnimInstance();
+
+};
+

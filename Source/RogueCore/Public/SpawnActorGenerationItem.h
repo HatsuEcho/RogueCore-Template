@@ -1,0 +1,24 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
+#include "GenerationItem.h"
+#include "Templates/SubclassOf.h"
+#include "SpawnActorGenerationItem.generated.h"
+
+class AActor;
+class UBoxComponent;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API ASpawnActorGenerationItem : public AGenerationItem {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TSubclassOf<AActor> ActorToSpawn;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UBoxComponent* Box;
+
+    ASpawnActorGenerationItem(const FObjectInitializer& ObjectInitializer);
+
+};
+

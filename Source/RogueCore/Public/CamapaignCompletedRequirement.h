@@ -1,0 +1,22 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "CampaignRequirement.h"
+#include "Templates/SubclassOf.h"
+#include "CamapaignCompletedRequirement.generated.h"
+
+class UCampaign;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UCamapaignCompletedRequirement : public UCampaignRequirement {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TSubclassOf<UCampaign> Campaign;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool InverseRequirement;
+
+    UCamapaignCompletedRequirement();
+
+};
+

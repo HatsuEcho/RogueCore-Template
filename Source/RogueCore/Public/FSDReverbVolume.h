@@ -1,0 +1,26 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Components/SphereComponent.h"
+#include "GameFramework/Actor.h"
+#include "FSDReverbVolume.generated.h"
+
+class UReverbEffect;
+class USphereComponent;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API AFSDReverbVolume : public AActor {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    USphereComponent* Collision;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    UReverbEffect* Reverb;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    float Priority;
+    
+    AFSDReverbVolume(const FObjectInitializer& ObjectInitializer);
+
+};
+

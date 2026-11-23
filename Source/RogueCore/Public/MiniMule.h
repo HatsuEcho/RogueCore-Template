@@ -1,0 +1,32 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "MULE.h"
+#include "MiniMule.generated.h"
+
+class AGem;
+
+UCLASS(Abstract, Blueprintable)
+class ROGUECORE_API AMiniMule : public AMULE {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    TArray<AGem*> LostLegs;
+
+    AMiniMule(const FObjectInitializer& ObjectInitializer);
+
+protected:
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void SetLegsVisibleOnScanner();
+    
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, BlueprintImplementableEvent)
+    void OnLegsSetVisible();
+    
+public:
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    TArray<AGem*> FindLegsInLevelSortedByDistance() const;
+    
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable, BlueprintImplementableEvent)
+    void CheatRepair();
+    
+};
+

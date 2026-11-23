@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"FriendlyName": "StreamlineCore (Blueprint SDK)",
+	"Description": "StreamlineBlueprint reflected interfaces for Blueprint authoring; no NVIDIA runtime integration.",
+	"Category": "Rendering",
+	"EnabledByDefault": false,
+	"CanContainContent": false,
+	"Modules": [
+		{ "Name": "StreamlineBlueprint", "Type": "Runtime", "LoadingPhase": "PostEngineInit" },
+		{ "Name": "StreamlineRHI", "Type": "Runtime", "LoadingPhase": "PostSplashScreen", "PlatformAllowList": ["Win64"] }
+	]
+}

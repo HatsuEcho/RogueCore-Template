@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "ItemUpgrade.h"
+#include "DamageBonusBaseUpgrade.generated.h"
+
+class UDamageCondition;
+
+UCLASS(Abstract, Blueprintable, EditInlineNew, MinimalAPI)
+class UDamageBonusBaseUpgrade : public UItemUpgrade {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UDamageCondition* Condition;
+
+    UDamageBonusBaseUpgrade();
+
+};
+

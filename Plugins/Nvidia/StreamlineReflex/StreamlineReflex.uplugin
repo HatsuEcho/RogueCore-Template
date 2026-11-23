@@ -1,0 +1,15 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"FriendlyName": "StreamlineReflex (Blueprint SDK)",
+	"Description": "StreamlineReflexBlueprint reflected interfaces for Blueprint authoring; no NVIDIA Reflex integration.",
+	"Category": "Rendering",
+	"EnabledByDefault": false,
+	"CanContainContent": false,
+	"Modules": [
+		{ "Name": "StreamlineReflexBlueprint", "Type": "Runtime", "LoadingPhase": "PostEngineInit" }
+	],
+	"Plugins": [
+		{ "Name": "StreamlineCore", "Enabled": true }
+	]
+}

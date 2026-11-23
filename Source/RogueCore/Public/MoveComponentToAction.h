@@ -1,0 +1,35 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Transform -FallbackName=Transform
+#include "Math/Transform.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=EEasingFunc -FallbackName=EEasingFunc
+#include "Kismet/KismetMathLibrary.h"
+#include "TickableActionBase.h"
+#include "MoveComponentToAction.generated.h"
+
+class UMoveComponentToAction;
+class UObject;
+class USceneComponent;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API UMoveComponentToAction : public UTickableActionBase {
+    GENERATED_BODY()
+public:
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FCompletedDelegate, USceneComponent*, Component);
+
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Export, meta=(AllowPrivateAccess=true))
+    TWeakObjectPtr<USceneComponent> Component;
+
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FCompletedDelegate Completed;
+
+    UMoveComponentToAction();
+
+protected:
+    UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContext"))
+    static UMoveComponentToAction* EaseComponentTo(UObject* WorldContext, USceneComponent* InComponent, FTransform InEndTransform, TEnumAsByte<EEasingFunc::Type> InEasingMode, bool InWorldSpace, float InDuration);
+    
+};
+

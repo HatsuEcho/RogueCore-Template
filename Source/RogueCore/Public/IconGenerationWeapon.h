@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "IconGenerationBase.h"
+#include "IconGenerationWeapon.generated.h"
+
+class UWeaponIconSceneCaptureComponent;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API AIconGenerationWeapon : public AIconGenerationBase {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Transient, meta=(AllowPrivateAccess=true))
+    TArray<UWeaponIconSceneCaptureComponent*> CaptureComponents;
+
+    AIconGenerationWeapon(const FObjectInitializer& ObjectInitializer);
+
+};
+

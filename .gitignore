@@ -1,0 +1,9 @@
+/.vs/
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+/Plugins/**/Intermediate/
+/.vsconfig
+/RogueCore.sln
+*.pdb

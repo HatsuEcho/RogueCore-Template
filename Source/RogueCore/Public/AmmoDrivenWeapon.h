@@ -1,0 +1,524 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Components/AudioComponent.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Quat -FallbackName=Quat
+#include "Math/Quat.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Vector -FallbackName=Vector
+#include "Math/Vector.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=RuntimeFloatCurve -FallbackName=RuntimeFloatCurve
+#include "AmmoDrivenGenericEventDelegate.h"
+#include "AmmoValue.h"
+#include "AmountChangedSignatureDelegate.h"
+#include "AnimatedItem.h"
+#include "DelegateDelegate.h"
+#include "EAmmoWeaponState.h"
+#include "ItemAnimationItem.h"
+#include "ItemAnimationSet.h"
+#include "ItemDelegateDelegate.h"
+#include "RecoilSettings.h"
+#include "ResupplliedSignatureDelegate.h"
+#include "TracerData.h"
+#include "Upgradable.h"
+#include "UpgradableGear.h"
+#include "WeaponFireOwner.h"
+#include "EAutomaitcSoundOverride.h"
+#include "AmmoDrivenWeapon.generated.h"
+
+class AFSDPawn;
+class APlayerCharacter;
+class UAmmoDriveWeaponAggregator;
+class UAnimMontage;
+class UAudioComponent;
+class UCurveFloat;
+class UDamageListenerComponent;
+class UDialogDataAsset;
+class UFXSystemAsset;
+class UForceFeedbackEffect;
+class UItemUpgrade;
+class ULightComponent;
+class UNiagaraSystem;
+class USoundBase;
+class USoundCue;
+class UWeaponFireComponent;
+class UWeaponTagContainerComponent;
+
+UCLASS(Abstract, Blueprintable)
+class ROGUECORE_API AAmmoDrivenWeapon : public AAnimatedItem, public IWeaponFireOwner, public IUpgradable, public IUpgradableGear {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UWeaponTagContainerComponent* WeaponTags;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FAmountChangedSignature OnClipCountChanged;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FResupplliedSignature OnAmmoResupplied;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FDelegate OnTryReloadEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FItemDelegate OnReloadingEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FDelegate OnShotFiredEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FAmmoDrivenGenericEvent OnStoppedUsingEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FDelegate OnAmmoUpdatedLocal;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UDamageListenerComponent* DamageListener;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UWeaponFireComponent* WeaponFire;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UAmmoDriveWeaponAggregator* Aggregator;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool LoopFireAnimation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool OverHeatOnNoAmmo;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float LoopFireAnimationBlendoutTime;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* FP_FireAnimation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* TP_FireAnimation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* FP_ReloadAnimation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* FP_ReloadAnimation_Empty;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FItemAnimationItem OverheatAnimation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FItemAnimationSet GunslingAnimationSet;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FItemAnimationSet NoAmmoGunslingAnimationSet;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* TP_ReloadAnimation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* TP_ReloadAnimation_Empty;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* WPN_Fire;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* WPN_FireLastBullet;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* WPN_Reload;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* WPN_ReloadEmpty;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UAnimMontage* WPN_Reload_TP;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UNiagaraSystem* MuzzleParticles;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FVector MuzzleParticleScale;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UNiagaraSystem* TPMuzzleParticles;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FVector TPMuzzleParticleScale;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UseTriggeredMuzzleParticles;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FTracerData Tracer;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UFXSystemAsset* CasingParticles;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UseTriggeredCasingParticleSystem;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Transient, meta=(AllowPrivateAccess=true))
+    ULightComponent* MuzzleFlashLight;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRuntimeFloatCurve MuzzleFlashLightCurve;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundBase* FireSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundCue* RicochetSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UFXSystemAsset* RicochetParticle;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float FireSoundDelayToTail;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundBase* FireSoundTail;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool IsFireSoundTail2D;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UForceFeedbackEffect* FireForceFeedbackEffect;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Export, Transient, meta=(AllowPrivateAccess=true))
+    TWeakObjectPtr<UAudioComponent> FireSoundInstance;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float FireSoundFadeDuration;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundCue* ReloadSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 BulletsRemainingForNearEmptySound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UCurveFloat* BulletsRemainingNearEmptyVolumeCurve;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool PlayNearEmptySoundsIn3D;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool PlayClipReachesZeroSoundsIn3D;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool PlayEmptySoundsIn3D;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundBase* NearEmptySound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundBase* ClipReachesZeroSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundBase* DryFireSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UDialogDataAsset* ShoutShotFired;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UDialogDataAsset* ShoutOutOfAmmo;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UDialogDataAsset* ShoutReloading;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 MaxAmmo;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 clipSize;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 ShotCost;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float RateOfFire;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 BurstCount;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float BurstCycleTime;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ReloadDuration;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float CancelReloadOnShootTimeFromEnd;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_ReserveCount, meta=(AllowPrivateAccess=true))
+    FAmmoValue ReserveCount;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_ClipCount, meta=(AllowPrivateAccess=true))
+    FAmmoValue ClipCount;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, meta=(AllowPrivateAccess=true))
+    int32 ManualHeatReductionAmmo;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float FireInputBufferTime;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    float AutoReloadDuration;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundCue* AutoReloadCompleteCue;
+
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FAmmoDrivenGenericEvent OnItemAutoReloaded;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float SupplyStatusWeight;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    float CycleTimeLeft;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UseCustomReloadDelay;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float CustomReloadDelay;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    float ReloadTimeLeft;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool AutomaticReload;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool CanReload;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float HoldToFirePercentOfFireRatePenalty;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRecoilSettings RecoilSettings;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool ApplyRecoilAtEndOfBurst;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float EndOfBurstRecoilMultiplier;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool HasAutomaticFire;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, ReplicatedUsing=OnRep_IsFiring, meta=(AllowPrivateAccess=true))
+    bool IsFiring;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool OverheatOnReload;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool ManualHeatReductionOnReload;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 MaxManualHeatReductionCharges;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ManualHeatReductionValue;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    EAmmoWeaponState WeaponState;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float MaxAngleForSuppressiveFire;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, meta=(AllowPrivateAccess=true))
+    bool HasRejoinedInitialized;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, meta=(AllowPrivateAccess=true))
+    bool IsGunslinging;
+
+    AAmmoDrivenWeapon(const FObjectInitializer& ObjectInitializer);
+
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void Upgraded_Blueprint_Implementation(const TArray<UItemUpgrade*>& upgrades);
+    
+protected:
+    UFUNCTION(BlueprintCallable)
+    void UpdateHoldToFire();
+    
+    UFUNCTION(BlueprintCallable)
+    void TransferAmmoToClip(int32 Amount);
+    
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_UpdateClipCount(const FAmmoValue& Val);
+    
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_UpdateAmmoCount(const FAmmoValue& Val);
+    
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_StopReload(float blendOutTime);
+    
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_StopGunsling();
+    
+    UFUNCTION(Reliable, Server)
+    void Server_SetSlowedEnemiesOnScreen(const TArray<TWeakObjectPtr<AFSDPawn>>& PawnsToSlow);
+    
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_ReloadWeapon(bool isFullyEmpty);
+    
+    UFUNCTION(BlueprintCallable, Server, Unreliable)
+    void Server_PlayWeaponEmptySound_3D();
+    
+    UFUNCTION(BlueprintCallable, Server, Unreliable)
+    void Server_PlayBurstFire(uint8 shotCount);
+    
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_Gunsling(uint8 Index);
+    
+public:
+    UFUNCTION(BlueprintCallable)
+    void ResupplyToPercent(float percentage);
+    
+    UFUNCTION(BlueprintCallable)
+    void ResupplyAmmo(int32 Amount);
+    
+protected:
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void RecieveFiredWeapon();
+    
+public:
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void Receive_ReloadEnd();
+    
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void Receive_ReloadBegin();
+    
+protected:
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void Receive_IsFiringChanged(bool NewValue);
+    
+    UFUNCTION(BlueprintCallable)
+    void OnWeaponFireEnded();
+    
+    UFUNCTION(BlueprintCallable)
+    void OnWeaponFired(const FVector& Location);
+    
+    UFUNCTION(BlueprintCallable)
+    void OnTagBonusChanged();
+    
+    UFUNCTION(BlueprintCallable)
+    void OnRicochet(const FVector& Origin, const FVector& Location, const FVector& Normal);
+    
+    UFUNCTION(BlueprintCallable)
+    void OnRep_ReserveCount();
+    
+    UFUNCTION(BlueprintCallable)
+    void OnRep_IsFiring();
+    
+    UFUNCTION(BlueprintCallable)
+    void OnRep_ClipCount();
+    
+    UFUNCTION(BlueprintCallable)
+    void OnGunslingEnded(UAnimMontage* Montage, bool bInterrupted);
+    
+public:
+    UFUNCTION(BlueprintCallable)
+    void MoveAmmoFromReserve(int32 Amount);
+    
+    UFUNCTION(BlueprintCallable)
+    void MoveAmmoBackToReserve(int32 Amount);
+    
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    bool IsClipFull() const;
+    
+    UFUNCTION(BlueprintCallable)
+    void InstantlyReload();
+    
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void CustomEvent1(const UItemUpgrade* Event);
+    
+    UFUNCTION(BlueprintCallable, Client, Reliable)
+    void Client_SetAmmoScalePercent(float Percent);
+    
+protected:
+    UFUNCTION(BlueprintCallable, Client, Reliable)
+    void Client_SetAmmo(float percentage);
+    
+    UFUNCTION(BlueprintCallable, Client, Reliable)
+    void Client_ResupplyAmmo(int32 count);
+    
+    UFUNCTION(BlueprintCallable, Client, Reliable)
+    void Client_RefillAmmo(float percentage);
+    
+public:
+    UFUNCTION(BlueprintCallable, Client, Reliable)
+    void Client_InitAmmo(int32 NewClipSize, int32 reserveCapacity);
+    
+protected:
+    UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+    void All_StopReload(float blendOutTime);
+    
+    UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+    void All_StartReload(bool isFullyEmpty);
+    
+    UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+    void All_PlayWeaponEmptySound_3D();
+    
+    UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+    void All_PlayBurstFire(uint8 shotCount);
+    
+    UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+    void All_Gunsling(uint8 Index);
+    
+
+    // Fix for true pure virtual functions not being implemented
+public:
+    UFUNCTION(BlueprintCallable)
+    APlayerCharacter* GetPlayerCharacter() const override PURE_VIRTUAL(GetPlayerCharacter, return NULL;);
+    
+    UFUNCTION(BlueprintCallable)
+    FQuat GetMuzzleQuat() const override PURE_VIRTUAL(GetMuzzleQuat, return FQuat{};);
+    
+    UFUNCTION(BlueprintCallable)
+    FVector GetMuzzleLocation() const override PURE_VIRTUAL(GetMuzzleLocation, return FVector{};);
+    
+    UFUNCTION(BlueprintCallable)
+    bool GetIsLocallyControlled() const override PURE_VIRTUAL(GetIsLocallyControlled, return false;);
+    
+    UFUNCTION(BlueprintCallable)
+    bool GetIsFirstPerson() const override PURE_VIRTUAL(GetIsFirstPerson, return false;);
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UseReservesAsClip;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 PartialReloadCount;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool CyclicalReload;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float CyclicalReloadSpeed;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<FName> ReloadAmountSegmentNames;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float CasingEjectDelay;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool SpawnCasingAttached;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool FireOnStartUsing;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    EAutomaitcSoundOverride FireSoundModeOverride;
+
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_StopCyclicalReloadAnim();
+
+    UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+    void All_StopCyclicalReloadAnim();
+
+};
+

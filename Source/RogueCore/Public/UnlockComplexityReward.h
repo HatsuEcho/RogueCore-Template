@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "UnlockReward.h"
+#include "UnlockComplexityReward.generated.h"
+
+class UStageComplexity;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UUnlockComplexityReward : public UUnlockReward {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UStageComplexity* Complexity;
+
+    UUnlockComplexityReward();
+
+};
+

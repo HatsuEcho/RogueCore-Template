@@ -1,0 +1,26 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Kismet/BlueprintAsyncActionBase.h"
+#include "OnHttpRequestCompletedDelegate.h"
+#include "WebBannerStreamer.generated.h"
+
+class UObject;
+class UWebBannerStreamer;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API UWebBannerStreamer : public UBlueprintAsyncActionBase {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FOnHttpRequestCompleted success;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FOnHttpRequestCompleted Failed;
+    
+    UWebBannerStreamer();
+
+    UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContextObject"))
+    static UWebBannerStreamer* DownloadConfig(UObject* WorldContextObject);
+    
+};
+

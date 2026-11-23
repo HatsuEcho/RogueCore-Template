@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "StatusEffectItem.h"
+#include "ShoutStatusEffectItem.generated.h"
+
+class UDialogDataAsset;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UShoutStatusEffectItem : public UStatusEffectItem {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UDialogDataAsset* BeginShout;
+
+    UShoutStatusEffectItem();
+
+};
+

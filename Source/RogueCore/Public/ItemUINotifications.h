@@ -1,0 +1,25 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Guid -FallbackName=Guid
+#include "UINotificationItem.h"
+#include "ItemUINotifications.generated.h"
+
+class UFSDSaveGame;
+
+USTRUCT(BlueprintType)
+struct FItemUINotifications {
+    GENERATED_BODY()
+protected:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<FUINotificationItem> UINotifications;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    TSet<FGuid> UINotificationSet;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    UFSDSaveGame* SaveGame;
+    
+public:
+    ROGUECORE_API FItemUINotifications();
+};
+

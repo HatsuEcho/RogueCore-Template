@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"FriendlyName": "DLSS (Blueprint SDK)",
+	"Description": "DLSSBlueprint reflected interfaces for Blueprint authoring; no NVIDIA rendering integration.",
+	"Category": "Rendering",
+	"EnabledByDefault": false,
+	"CanContainContent": true,
+	"Modules": [
+		{ "Name": "DLSS", "Type": "Runtime", "LoadingPhase": "PostEngineInit", "PlatformAllowList": ["Win64"] },
+		{ "Name": "DLSSBlueprint", "Type": "Runtime", "LoadingPhase": "PostConfigInit" }
+	]
+}

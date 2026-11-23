@@ -1,0 +1,12 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"FriendlyName": "DiscordSDK (Blueprint SDK)",
+	"Description": "DiscordSDK reflected interfaces for Blueprint authoring; no Discord integration.",
+	"Category": "Online",
+	"EnabledByDefault": false,
+	"CanContainContent": true,
+	"Modules": [
+		{ "Name": "DiscordSDK", "Type": "Runtime", "LoadingPhase": "PreDefault" }
+	]
+}

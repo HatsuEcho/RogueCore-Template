@@ -1,0 +1,59 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "HitscanBaseComponent.h"
+#include "MultiHitScanHits.h"
+#include "OnHitDelegateDelegate.h"
+#include "CapsuleHitscanComponent.generated.h"
+
+class AActor;
+class ADamageEnhancer;
+
+UCLASS(Blueprintable, ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
+class ROGUECORE_API UCapsuleHitscanComponent : public UHitscanBaseComponent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    ADamageEnhancer* DamageEnhancer;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FOnHitDelegate OnHitEffect;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FOnHitDelegate OnClosestHit_Client;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float Range;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float Width;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool ShowPhysMatImpact;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool ShowPhysMatDecal;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool PlayPhysMatSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    TSet<AActor*> ActorsInCapsule;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    TArray<AActor*> ActorsHit;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    FMultiHitScanHits Hits;
+
+    UCapsuleHitscanComponent(const FObjectInitializer& ObjectInitializer);
+
+protected:
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_RegisterHit(const FMultiHitScanHits& hitResults);
+    
+    UFUNCTION(BlueprintCallable, NetMulticast, Unreliable)
+    void All_ShowHit(const FMultiHitScanHits& hitResults);
+    
+};
+

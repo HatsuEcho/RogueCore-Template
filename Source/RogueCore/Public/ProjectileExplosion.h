@@ -1,0 +1,42 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Vector -FallbackName=Vector
+#include "Math/Vector.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=HitResult -FallbackName=HitResult
+#include "ExplosionBaseComponent.h"
+#include "ScaledEffect.h"
+#include "ProjectileExplosion.generated.h"
+
+class UForceFeedbackAttenuation;
+class UForceFeedbackEffect;
+class USoundCue;
+
+UCLASS(Blueprintable, ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
+class ROGUECORE_API UProjectileExplosion : public UExplosionBaseComponent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool PlayImpactFXFromMaterial;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FScaledEffect ExplosionEffect;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundCue* ExplosionSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UForceFeedbackEffect* ForceFeedbackEffect;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UForceFeedbackAttenuation* ForceFeedbackAttanuation;
+
+    UProjectileExplosion(const FObjectInitializer& ObjectInitializer);
+
+    UFUNCTION(BlueprintCallable)
+    void SpawnEffectsFromHit(const FHitResult& Hit);
+    
+    UFUNCTION(BlueprintCallable)
+    void SpawnEffects(FVector Location, FVector Normal);
+    
+};
+

@@ -1,0 +1,52 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=ActorComponent -FallbackName=ActorComponent
+#include "RepairedDelegateDelegate.h"
+#include "RepairableComponent.generated.h"
+
+class APlayerCharacter;
+class UGemResourceData;
+
+UCLASS(Blueprintable, ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
+class ROGUECORE_API URepairableComponent : public UActorComponent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRepairedDelegate OnFullyRepairedEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRepairedDelegate OnAllResourcesAquiredEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRepairedDelegate OnRepairedEvent;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UGemResourceData* RequiresCarriedResource;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_ResourcesRequired, meta=(AllowPrivateAccess=true))
+    int32 ResourcesRequired;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Transient, meta=(AllowPrivateAccess=true))
+    bool IsFullyRepaired;
+
+    URepairableComponent(const FObjectInitializer& ObjectInitializer);
+
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    bool TryRepair(APlayerCharacter* User);
+    
+protected:
+    UFUNCTION(BlueprintCallable)
+    void OnRep_ResourcesRequired();
+    
+public:
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    int32 GetResourcesRequired() const;
+    
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void Cheat_Repair();
+    
+};
+

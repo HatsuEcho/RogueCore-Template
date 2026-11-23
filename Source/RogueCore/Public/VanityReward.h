@@ -1,0 +1,34 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "UnlockReward.h"
+#include "VanityReward.generated.h"
+
+class UPlayerCharacterID;
+class UVanityItem;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UVanityReward : public UUnlockReward {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UVanityItem* VanityItem;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TMap<UPlayerCharacterID*, UVanityItem*> PerClassVanityItems;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UnlockedPerClass;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UsePerClassVanityItems;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UPlayerCharacterID* OptionalCharacterID;
+
+    UVanityReward();
+
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    UVanityItem* GetVanityItem(const UPlayerCharacterID* InPlayerCharacterID) const;
+    
+};
+

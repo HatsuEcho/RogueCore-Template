@@ -1,0 +1,22 @@
+#include "SaveGameLibrary.h"
+
+USaveGameLibrary::USaveGameLibrary() {
+}
+
+bool USaveGameLibrary::TryGetSaveGameSnapShot(UObject* WorldContext, const FString& Filename, int32 userIdx, FSaveGameSnapShot& OutSnapShot) {
+    return false;
+}
+
+bool USaveGameLibrary::SaveGameToSlotAtomic(USaveGame* SaveGameObject, const FString& slotName, int32 UserIndex) {
+    return false;
+}
+
+TMap<FString, FDateTime> USaveGameLibrary::GetUserSaveGameSlots(const FString& UserId) {
+    return TMap<FString, FDateTime>();
+}
+
+TMap<FString, FDateTime> USaveGameLibrary::GetAllSaveGameSlots() {
+    return TMap<FString, FDateTime>();
+}
+
+

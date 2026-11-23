@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "UnlockReward.h"
+#include "ItemBlueprintReward.generated.h"
+
+class UItemID;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UItemBlueprintReward : public UUnlockReward {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UItemID* ItemID;
+
+    UItemBlueprintReward();
+
+};
+

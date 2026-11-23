@@ -1,0 +1,31 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "DamageBonusBase.h"
+#include "Templates/SubclassOf.h"
+#include "PushStatusEffectDamageBonus.generated.h"
+
+class UStatusEffect;
+
+UCLASS(Blueprintable, CollapseCategories, EditInlineNew)
+class ROGUECORE_API UPushStatusEffectDamageBonus : public UDamageBonusBase {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TSubclassOf<UStatusEffect> StatusEffect;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FString ChanceName;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float Chance;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool IgnoreArmorHit;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool ApplyToInstigator;
+
+    UPushStatusEffectDamageBonus();
+
+};
+

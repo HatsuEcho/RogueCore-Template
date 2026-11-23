@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "ShootingPlant.h"
+#include "HydraWeedShooter.generated.h"
+
+class AHydraWeedCore;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API AHydraWeedShooter : public AShootingPlant {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    AHydraWeedCore* Core;
+
+    AHydraWeedShooter(const FObjectInitializer& ObjectInitializer);
+
+};
+

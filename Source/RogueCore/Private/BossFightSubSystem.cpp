@@ -1,0 +1,23 @@
+#include "BossFightSubSystem.h"
+
+UBossFightSubSystem::UBossFightSubSystem() {
+}
+
+void UBossFightSubSystem::RemoveCustomBossFightWidget(UUserWidget* InWidget) {
+}
+
+void UBossFightSubSystem::RegisterBossFight(TScriptInterface<IBossFightInterface> BossFight) {
+}
+
+void UBossFightSubSystem::DeregisterBossFight(AActor* Boss) {
+}
+
+void UBossFightSubSystem::AddCustomBossFightWidget(UUserWidget* InWidget) {
+}
+
+
+
+AActor* UBossFightSubSystem::GetBoss(const UObject* WorldContextObject, TSubclassOf<AActor> BossClass) {
+    return NULL;
+}
+

@@ -1,0 +1,25 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=WorldSubsystem -FallbackName=WorldSubsystem
+#include "BoolDelegateDelegate.h"
+#include "DelegateDelegate.h"
+#include "TrackingTypeDelegate.h"
+#include "HUDActorTrackingSubsystem.generated.h"
+
+UCLASS(Blueprintable)
+class ROGUECORE_API UHUDActorTrackingSubsystem : public UWorldSubsystem {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FBoolDelegate OnToggleTrackingEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FDelegate OnShowAlwaysTrackedEvent;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FTrackingType OnToggleTrackingByType;
+    
+    UHUDActorTrackingSubsystem();
+
+};
+

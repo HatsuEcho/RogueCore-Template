@@ -1,0 +1,97 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Rotator -FallbackName=Rotator
+#include "EventParticipant.h"
+#include "FSDPawn.h"
+#include "TowerEventModule.generated.h"
+
+class ATowerEventModule;
+class UArmorHealthDamageComponent;
+class UEnemyHealthComponent;
+class UFXSystemAsset;
+class UParticleSystemComponent;
+class USceneComponent;
+class USkeletalMesh;
+class USkeletalMeshComponent;
+class USoundCue;
+class UStaticMesh;
+class UStaticMeshComponent;
+class UWeakpointGlowComponent;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API ATowerEventModule : public AFSDPawn, public IEventParticipant {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UStaticMesh* ArmorMesh;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 ArmorPieces;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ArmorLifetime;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ArmorPopForce;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ArmorShedDelay;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Transient, meta=(AllowPrivateAccess=true))
+    TArray<UStaticMeshComponent*> ArmorMeshes;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    FRotator MainBodyRotation;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USkeletalMesh* DestroyedMesh;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    USoundCue* ExplosionSound;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UFXSystemAsset* ExplosionEffect;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Transient, meta=(AllowPrivateAccess=true))
+    ATowerEventModule* PreviousModule;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Replicated, Transient, meta=(AllowPrivateAccess=true))
+    ATowerEventModule* NextModule;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    USceneComponent* Root;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    USkeletalMeshComponent* mesh;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UEnemyHealthComponent* Health;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UArmorHealthDamageComponent* ArmorDamage;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UWeakpointGlowComponent* WeakpointGlow;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UParticleSystemComponent* SmokeParticles;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UParticleSystemComponent* SmokeParticlesNS;
+    
+public:
+    ATowerEventModule(const FObjectInitializer& ObjectInitializer);
+
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void OnAttack();
+    
+    UFUNCTION(BlueprintCallable)
+    void HideArmorPlates();
+    
+    UFUNCTION(BlueprintCallable)
+    void DestroyArmor();
+    
+
+    // Fix for true pure virtual functions not being implemented
+    virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override { TagContainer = GameplayTags; }
+};
+

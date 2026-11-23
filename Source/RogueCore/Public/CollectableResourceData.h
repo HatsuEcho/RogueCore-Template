@@ -1,0 +1,55 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "ResourceData.h"
+#include "Templates/SubclassOf.h"
+#include "CollectableResourceData.generated.h"
+
+class AActor;
+class AProceduralSetup;
+class UCollectableResourceCreator;
+class UDebrisBase;
+class UDebrisPositioning;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API UCollectableResourceData : public UResourceData {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool ScaleToRoomResourceMultiplier;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UCollectableResourceCreator* ResourceCreator;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    UDebrisPositioning* Positioning;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float Rarity;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float InfluenceRadius;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<TSoftObjectPtr<UDebrisBase>> Debris;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool UseTerrainPlacement;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<TSoftClassPtr<AActor>> CollectableClasses;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    TArray<TSubclassOf<AActor>> CollectableClassesLoaded;
+
+    UCollectableResourceData();
+
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    float GetDesiredAmount(AProceduralSetup* pls) const;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool bAllowSpawnInBossRoom;
+
+};
+

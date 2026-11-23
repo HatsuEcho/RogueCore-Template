@@ -1,0 +1,77 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=CoreUObject -ObjectName=Vector -FallbackName=Vector
+#include "GameEvent.h"
+#include "Templates/SubclassOf.h"
+#include "RivalBomb.generated.h"
+
+class AGem;
+class ARivalBombNode;
+class UCurveFloat;
+class UDebrisPositioning;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API ARivalBomb : public AGameEvent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TSubclassOf<AGem> DataCell;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TSubclassOf<ARivalBombNode> RivalBomb;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UDebrisPositioning* NodePositioning;
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UCurveFloat* NodeCostCurve;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<ARivalBombNode*> ActiveNodeInstances;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float NodeHackTime;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 NumNodesToHack;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_DataCellPickedUp, meta=(AllowPrivateAccess=true))
+    bool bDataCellPickedUp;
+
+public:
+    ARivalBomb(const FObjectInitializer& ObjectInitializer);
+
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void UpdateNodesOnStart();
+    
+private:
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void SpawnDataCell();
+    
+protected:
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void ReceiveDataCellPickedUp();
+    
+    UFUNCTION(BlueprintCallable)
+    void OnRep_DataCellPickedUp();
+    
+private:
+    UFUNCTION(BlueprintCallable)
+    void OnMatchStarted();
+    
+protected:
+    UFUNCTION(BlueprintCallable)
+    void OnDataCellPickedUp(bool Attached, FVector PrevScale);
+    
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void DeactivateAllNodes(bool Failed);
+    
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void ActivateNewNode();
+    
+    // Fix for true pure virtual functions not being implemented
+        virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override { TagContainer = GameplayTags; }
+
+};
+

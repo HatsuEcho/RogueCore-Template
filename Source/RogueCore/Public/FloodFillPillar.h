@@ -1,0 +1,32 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "RandLinePoint.h"
+#include "RandRange.h"
+#include "RoomFeature.h"
+#include "FloodFillPillar.generated.h"
+
+class UFloodFillSettings;
+
+UCLASS(Blueprintable, EditInlineNew)
+class ROGUECORE_API UFloodFillPillar : public URoomFeature {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    UFloodFillSettings* NoiseOverride;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TArray<FRandLinePoint> Points;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRandRange RangeScale;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRandRange NoiseRangeScale;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FRandRange EndcapScale;
+
+    UFloodFillPillar();
+
+};
+

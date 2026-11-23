@@ -1,0 +1,29 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "ERunDepth.h"
+#include "IntelChallengePlayerMonitor.h"
+#include "IntelChallengeUseDataTerminal.generated.h"
+
+class AActor;
+
+UCLASS(Abstract, Blueprintable)
+class ROGUECORE_API UIntelChallengeUseDataTerminal : public UIntelChallengePlayerMonitor {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    int32 RequiredUseAmount;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    ERunDepth RequiredRunDepth;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    bool RequireMutator;
+
+    UIntelChallengeUseDataTerminal();
+
+private:
+    UFUNCTION(BlueprintCallable)
+    void OnActivatedTerminal(AActor* TerminalActor);
+    
+};
+

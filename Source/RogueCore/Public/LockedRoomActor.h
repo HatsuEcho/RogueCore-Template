@@ -1,0 +1,21 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "StructureActor.h"
+#include "LockedRoomActor.generated.h"
+
+class UBXEBlueprintControlledObjective;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API ALockedRoomActor : public AStructureActor {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Transient, meta=(AllowPrivateAccess=true))
+    UBXEBlueprintControlledObjective* Objective;
+
+    ALockedRoomActor(const FObjectInitializer& ObjectInitializer);
+
+    UFUNCTION(BlueprintCallable)
+    void SetObjective(UBXEBlueprintControlledObjective* InObjective);
+    
+};
+

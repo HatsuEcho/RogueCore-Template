@@ -1,0 +1,8 @@
+#include "PickaxePartReward.h"
+
+UPickaxePartReward::UPickaxePartReward() {
+    this->PicaxePart = NULL;
+    this->UnlockedPerClass = false;
+}
+
+

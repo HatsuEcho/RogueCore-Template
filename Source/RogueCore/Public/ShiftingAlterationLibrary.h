@@ -1,0 +1,14 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=BlueprintFunctionLibrary -FallbackName=BlueprintFunctionLibrary
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "ShiftingAlterationLibrary.generated.h"
+
+UCLASS(Blueprintable)
+class ROGUECORE_API UShiftingAlterationLibrary : public UBlueprintFunctionLibrary {
+    GENERATED_BODY()
+public:
+    UShiftingAlterationLibrary();
+
+};
+

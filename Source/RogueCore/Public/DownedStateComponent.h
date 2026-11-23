@@ -1,0 +1,68 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "CharacterStateComponent.h"
+#include "DeathIntroSettings.h"
+#include "EnableDownedBombUIDelegateDelegate.h"
+#include "Templates/SubclassOf.h"
+#include "DownedStateComponent.generated.h"
+
+class UDamageAsset;
+
+
+class UDamageComponent;
+
+UCLASS(Blueprintable, MinimalAPI, ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
+class UDownedStateComponent : public UCharacterStateComponent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FDeathIntroSettings Intro;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float DownedHealthLossPerSecond;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float TerrainRemovedFallThreshold;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    bool DownedBombActive;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    bool PlayIntroSequence;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, Transient, meta=(AllowPrivateAccess=true))
+    UDamageComponent* DownedBombDamage;
+
+    UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FEnableDownedBombUIDelegate OnEnableDownedBombUIEvent;
+
+    UDownedStateComponent(const FObjectInitializer& ObjectInitializer);
+
+protected:
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void TriggerDownedBombDamage();
+    
+public:
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_TriggerDownedBomb();
+    
+protected:
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+    void Receive_TriggerDownedBomb();
+    
+public:
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    UDamageComponent* CreateDownedBombDamage(TSubclassOf<UDamageComponent> DamageClass);
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, meta=(AllowPrivateAccess=true))
+    UDamageAsset* DownedBombDamageAsset;
+
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void SetDownedBombRadialDamage(float Damage);
+
+    UFUNCTION(BlueprintAuthorityOnly, BlueprintCallable)
+    void SetDownedBombDamage(UDamageAsset* DamageAsset, float Radius);
+
+};
+

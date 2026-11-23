@@ -1,0 +1,92 @@
+#pragma once
+#include "CoreMinimal.h"
+//CROSS-MODULE INCLUDE V2: -ModuleName=Engine -ObjectName=ActorComponent -FallbackName=ActorComponent
+#include "Components/ActorComponent.h"
+#include "ResourceAddedDelegate.h"
+#include "ResourceAddedSignatureDelegate.h"
+#include "ResourceChangedSignatureDelegate.h"
+#include "ResourceFullSignatureDelegate.h"
+#include "ResourcesComponent.generated.h"
+
+class UResourceBankFilter;
+
+
+class UCappedResource;
+class UResourceData;
+
+UCLASS(Blueprintable, ClassGroup=Custom, meta=(BlueprintSpawnableComponent))
+class ROGUECORE_API UResourcesComponent : public UActorComponent {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FResourceChangedSignature OnResourceChanged;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FResourceAddedSignature OnResourceIncreased;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FResourceFullSignature OnResourceFull;
+    
+    UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    FResourceAdded OnResourceAdded;
+    
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, ReplicatedUsing=OnRep_Resources, meta=(AllowPrivateAccess=true))
+    TArray<UCappedResource*> Resources;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    float ResourceCap;
+
+    UResourcesComponent(const FObjectInitializer& ObjectInitializer);
+
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+    UFUNCTION(BlueprintCallable)
+    void ResourceIncreased(UCappedResource* Resource, float Delta);
+    
+    UFUNCTION(BlueprintCallable)
+    void ResourceFull(UCappedResource* Resource);
+    
+    UFUNCTION(BlueprintCallable)
+    void ResourceChanged(UCappedResource* Resource, float CurrentAmount);
+    
+public:
+    UFUNCTION(BlueprintCallable)
+    void RemoveAllResources();
+    
+protected:
+    UFUNCTION(BlueprintCallable)
+    void OnRep_Resources();
+    
+public:
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    static int32 GetXPFromResourceMap(const TMap<UResourceData*, float>& NewResources);
+    
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    int32 GetXpFromMining() const;
+    
+    UFUNCTION(BlueprintCallable)
+    static TMap<UResourceData*, float> GetSeparateResourcesFromMap(const TMap<UResourceData*, float>& NewResources);
+    
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    float GetResourceAmount(const UResourceData* InData) const;
+    
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    UCappedResource* GetResource(UResourceData* Data, bool createIfAmountIsZero);
+    
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    float GetCapacityPct() const;
+    
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    TArray<UCappedResource*> GetAllResources() const;
+    
+    UFUNCTION(BlueprintCallable)
+    float AddResource(UResourceData* InData, float Amount);
+    
+public:
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    float GetFilteredCapacityPct(UResourceBankFilter* Filter) const;
+
+};
+

@@ -1,0 +1,18 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "VaultObjectiveSpotActor.generated.h"
+
+class USceneComponent;
+
+UCLASS(Abstract, Blueprintable)
+class ROGUECORE_API AVaultObjectiveSpotActor : public AActor {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Instanced, meta=(AllowPrivateAccess=true))
+    USceneComponent* RootSceneComponent;
+
+    AVaultObjectiveSpotActor(const FObjectInitializer& ObjectInitializer);
+
+};
+

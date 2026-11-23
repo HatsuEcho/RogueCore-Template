@@ -1,0 +1,23 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "DualWieldWeapon.h"
+#include "Templates/SubclassOf.h"
+#include "DualMachinePistols.generated.h"
+
+class UStatusEffect;
+
+UCLASS(Blueprintable)
+class ROGUECORE_API ADualMachinePistols : public ADualWieldWeapon {
+    GENERATED_BODY()
+public:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(AllowPrivateAccess=true))
+    TSubclassOf<UStatusEffect> EmptyClipStatusEffect;
+
+    ADualMachinePistols(const FObjectInitializer& ObjectInitializer);
+
+protected:
+    UFUNCTION(BlueprintCallable, Reliable, Server)
+    void Server_TriggerStatusEffect();
+    
+};
+
